@@ -1,0 +1,231 @@
+ 
+/* #do loops */
+data something;
+do i = 1 to 40;
+   b = i**2 + 2*i;
+   output;
+   end;
+run;
+
+proc print data=something;
+run;
+
+
+data some;
+do i = 1 to 400 by 10;
+   b = i**2 + 2*i;
+   output;
+   end;
+run;
+
+proc print data=some;
+title "increment by ten";
+run;
+
+/* #random numbers using ranuni */
+data somethingtoo;
+do i = 1 to 40;
+   b = i**2 + 2*i;
+   c = ranuni(123)*i;
+   output;
+   end;
+run;
+
+proc print data=somethingtoo;
+run;
+
+proc corr data=ajay23.boston;
+run;
+
+proc corr data=ajay23.boston;
+var medv rm lstat ptratio;
+run;
+
+proc univariate data=ajay23.boston;
+var medv;
+run;
+
+
+proc univariate data=ajay23.boston normal;
+var medv;
+run;
+
+
+proc univariate data=ajay23.boston plot;
+var medv;
+run;
+
+data iris;
+set sashelp.iris;
+run;
+
+proc means data=iris mean;
+class species;
+run;
+proc print data=iris;
+run;
+
+proc sort data=iris out=irissort;
+by SepalLength;
+run;
+
+
+proc print data=irissort;
+run;
+
+
+proc sort data=iris out=irissort2;
+by Species SepalLength;
+run;
+/* #by order is important for sorting */
+
+/* WE NEED TO SORT DATA IN SAS BEFORE MERGING */
+
+proc print data=irissort2;
+run;
+
+
+proc sort data=something nodupkey;
+by i;
+run;
+/*  */
+/*  NOTE: There were 40 observations read from the data set WORK.SOMETHING. */
+/*  NOTE: 0 observations with duplicate key values were deleted. */
+/*  NOTE: The data set WORK.SOMETHING has 40 observations and 2 variables. */
+
+proc sort data=some nodupkey;
+by i;
+run;
+/*  */
+/*  NOTE: 0 observations with duplicate key values were deleted. */
+/*  NOTE: The data set WORK.SOME has 40 observations and 2 variables. */
+
+proc sort data=somethingtoo nodupkey;
+by i;
+run;
+/*  */
+/*  NOTE: 0 observations with duplicate key values were deleted. */
+/*  NOTE: The data set WORK.SOMETHINGTOO has 40 observations and 3 variables. */
+
+data merged;
+set something somethingtoo some;
+by i;
+run;
+/*  */
+/*  NOTE: There were 40 observations read from the data set WORK.SOMETHING. */
+/*  NOTE: There were 40 observations read from the data set WORK.SOMETHINGTOO. */
+/*  NOTE: There were 40 observations read from the data set WORK.SOME. */
+/*  NOTE: The data set WORK.MERGED has 120 observations and 3 variables */
+
+data merged;
+merge something somethingtoo some;
+by i;
+run;
+/*  */
+/*  NOTE: There were 40 observations read from the data set WORK.SOMETHING. */
+/*  NOTE: There were 40 observations read from the data set WORK.SOMETHINGTOO. */
+/*  NOTE: There were 40 observations read from the data set WORK.SOME. */
+/*  NOTE: The data set WORK.MERGED has 76 observations and 3 variables. */
+
+data merged2;
+merge something somethingtoo ;
+by i;
+run;
+
+
+data merged3 ;
+merge some (in =x) somethingtoo (in=y);
+by i;
+if x;
+run;
+
+
+proc print data=merged3 (obs=10);
+run;
+
+/*  */
+/* Obs	i	b	c */
+/* 1	1	3	0.7504 */
+/* 2	11	143	8.5380 */
+/* 3	21	483	13.7150 */
+/* 4	31	1023	18.2426 */
+/* 5	41	1763	. */
+/* 6	51	2703	. */
+/* 7	61	3843	. */
+/* 8	71	5183	. */
+/* 9	81	6723	. */
+/* 10	91	8463	. */
+data merged4 ;
+merge some (in =x) somethingtoo (in=y);
+by i;
+if y;
+run;
+proc print data=merged4 (obs=10);
+run;
+
+
+/* Obs	i	b	c */
+/* 1	1	3	0.75040 */
+/* 2	2	8	0.64182 */
+/* 3	3	15	0.53517 */
+/* 4	4	24	3.62413 */
+/* 5	5	35	1.78559 */
+/* 6	6	48	1.32668 */
+/* 7	7	63	5.50507 */
+/* 8	8	80	3.18466 */
+/* 9	9	99	1.12199 */
+/* 10	10	120	1.87686 */
+proc rank data=iris groups=10 out=irisrank;
+var sepallength;
+run;
+proc print data=iris;
+run;
+proc print data=irisrank;
+run;
+
+proc freq data=irisrank;
+tables sepallength;
+run;
+
+
+data study;
+input ht wt age income dob$12. name$;
+datalines;
+177 81 39 10 01/04/1977   Ajay
+182 81 40 7  26/04/1977  Babu
+170 70 35 10 02/06/1981    Sanjiv
+160 80 31 10 02/05/1986     Manju
+150 50 25 10 02/08/1992  Shaguna
+;
+run;
+
+
+data study;
+set study;
+lent=length(dob);
+yr=substr(dob,lent-3,lent);
+run;
+
+proc print data=study;
+run;
+
+
+proc contents data=study;
+run;
+
+data study;
+set study;
+format dob2 date9.;
+dob2=input(dob,ddmmyy10.);
+name2=substr(name,1,3);
+run;
+
+proc print data=study;
+run;
+/*  */
+/* Obs	ht	wt	age	income	dob	name	dob2	name2 */
+/* 1	177	81	39	10	01/04/1977	Ajay	01APR1977	Aja */
+/* 2	182	81	40	7	26/04/1977	Babu	26APR1977	Bab */
+/* 3	170	70	35	10	02/06/1981	Sanjiv	02JUN1981	San */
+/* 4	160	80	31	10	02/05/1986	Manju	02MAY1986	Man */
+/* 5	150	50	25	10	02/08/1992	Shaguna	02AUG1992	Sha */
