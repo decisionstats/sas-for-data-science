@@ -1,0 +1,232 @@
+data ajay;
+/* format a date9. ; */
+a=today();
+run;
+
+proc print data=ajay;
+run;
+
+data ajay;
+format a date9. ;
+a=today();
+run;
+
+proc print data=ajay;
+run;
+
+
+data ajay;
+format a date6. ;
+a=today();
+run;
+
+proc print data=ajay;
+run;
+
+data ajay;
+format a ddmmyy. ;
+a=today();
+run;
+
+proc print data=ajay;
+run;
+
+
+data ajay;
+format a ddmmyy. ;
+a=today();
+b=today()-100;
+if a gt b then c="yes";
+ else c="no";
+run;
+
+proc print data=ajay;
+run;
+
+data cars;
+set sashelp.cars;
+run;
+
+proc print data=cars (obs=5);
+run;
+
+proc print data=cars (obs=5);
+var make model origin; 
+run;
+
+proc contents data=cars;
+run;
+
+proc contents data=cars varnum;
+run;
+
+
+data cars;
+set cars;
+diff = msrp-invoice;
+run;
+
+proc means data=cars n nmiss min q1 mean median q3 max;
+var diff;
+run;
+
+proc means data=cars ;
+var diff;
+run;
+
+proc freq data=cars;
+tables make model type origin;
+run;
+
+
+proc freq data=cars;
+tables make  type origin /nocum nocol norow;
+run;
+
+
+
+proc freq data=cars;
+tables make*type /nocum nocol norow;
+run;
+
+
+proc freq data=cars;
+tables type*origin /nocum nocol norow;
+run;
+
+proc freq data=cars nlevels ;
+table make origin type/norow nocol nocum nopercent nofreq;
+run;
+
+/* http://vincentarelbundock.github.io/Rdatasets/csv/MASS/Boston.csv */
+
+
+
+%web_drop_table(WORK.IMPORT);
+
+
+FILENAME REFFILE '/folders/myfolders/Boston/Boston.csv';
+
+PROC IMPORT DATAFILE=REFFILE
+	DBMS=CSV
+	OUT=WORK.IMPORT;
+	GETNAMES=YES;
+RUN;
+
+PROC CONTENTS DATA=WORK.IMPORT; RUN;
+
+
+%web_open_table(WORK.IMPORT);
+
+proc datasets lib=work  ;
+
+proc contents data=import varnum;
+run;
+
+proc print data=import (obs=5);
+run;
+
+
+data import (drop =var1);
+set import;
+run;
+
+libname ajay23 "/folders/myfolders/Boston" ;
+run;
+
+proc datasets lib=ajay23;
+
+data ajay23.boston;
+set import;
+run;
+/*  */
+/* For Boston */
+/* 1) Give average median price mpeg for chas river facing ( chas  1 or no) */
+/* 2) Convert chas to a categorical variable */
+/* 3) Give average median price pmeg for rooms (rm)  */
+/*  */
+
+proc contents data =ajay23.boston varnum;
+run;
+
+proc means data=ajay23.boston mean;
+var medv;
+class chas;
+run;
+
+data ajay23.boston;
+set ajay23.boston;
+if chas=1 then riverfacing="yes";
+else riverfacing="no";
+run;
+
+proc freq data=ajay23.boston;
+tables chas*riverfacing /nocum nocol norow  nopercent;
+run;
+
+
+proc means data=ajay23.boston median;
+var medv;
+class rm;
+run;
+
+/* For cars */
+/* 1) Give me average mileage across different cylinders */
+/* 2) Give me maximum mileage across different drivetrain */
+/* 3) Give me a cross tabulation between drivetrain and cylinders */
+/* 4) Create a new variable mileage per horsepower */
+/* 5) Give me average horse power by type  */
+data cars;
+set sashelp.cars;
+run;
+
+proc freq data=cars ;
+tables drivetrain;
+run;
+
+proc freq data=cars ;
+tables type;
+run;
+proc contents data=cars varnum;
+run;
+
+
+/* Cylinders */
+/* MPG_City */
+/* drivetrain */
+/* Horsepower */
+/* type */
+
+data carsanalysis (keep=Cylinders MPG_City drivetrain Horsepower type);
+set cars;
+run;
+/* 2.1 */
+proc means data=carsanalysis  mean;
+var mpg_city;
+class cylinders;
+run;
+
+
+proc means data=carsanalysis  max;
+var mpg_city;
+class drivetrain;
+run;
+
+
+proc freq data=carsanalysis;
+tables drivetrain*cylinders /nocum nocol norow nopercent;
+run;
+
+data carsanalysis;
+set carsanalysis;
+newvar=mpg_city /Horsepower ;
+run;
+
+proc print data =carsanalysis (obs=5);
+run;
+
+
+proc means data=carsanalysis  max;
+var Horsepower ;
+class type;
+run;
