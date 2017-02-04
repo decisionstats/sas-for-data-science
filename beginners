@@ -1,0 +1,274 @@
+data ajay;
+/* format a date9. ; */
+a=today();
+run;
+
+data ajay;
+format a date9. ;
+a=today();
+run;
+
+proc print data=ajay;
+run;
+
+data ajay;
+format a date9. ;
+a=today();
+run;
+
+proc print data=ajay;
+run;
+
+
+
+/* this is my comment and its not a # */
+/* how to uncomment use comment +/ again   */
+
+/* Comments */
+/*    */  
+/* in sas  and # in R */
+
+
+
+/* manual entry data */
+
+data second;
+input m n;
+datalines;
+6 2.13
+5 5.6
+4 6.6
+4 4.5
+6 7.8
+;
+run;
+
+proc print data = second;
+run;
+
+data third;
+input m n o$;
+datalines;
+6 2.13 apple
+5 5.6 banana
+4 6.6 orange
+4 4.5 pineapple
+6 7.8 raspberry
+;
+run;
+
+proc print data = third;
+run;
+
+
+proc print data = third (obs=2);
+run;
+
+
+proc print data = third (firstobs=3 obs=4);
+run;
+
+data newone.third;
+set third;
+run;
+
+proc datasets library=work;
+
+proc datasets library=sashelp;
+
+
+proc datasets library=sashelp memtype=data;
+
+proc datasets library=newone;
+
+
+proc datasets lib=newone;
+change third=myfirstpermanent;
+
+proc datasets library=newone;
+
+
+proc datasets library=work memtype=data;
+ 
+proc datasets lib=work;
+delete first;
+
+proc datasets library=work memtype=data;
+
+
+data baseball;
+set sashelp.baseball;
+run;
+
+proc print data=baseball (firstobs=3 obs=10);
+run;
+
+proc print data=baseball ;
+title "My Baseball Data";
+run;
+
+proc print data=baseball;
+var nHome nRuns;
+run;
+
+
+proc print data=baseball;
+var nHome nRuns;
+sum nHome nRuns;
+run;
+
+proc sort data=baseball;
+by team;
+run;
+
+
+proc sort data=baseball;
+by team nHome nRuns;
+run;
+
+
+
+proc sort data=baseball out=baseball2;
+by  nHome ;
+run;
+
+
+proc print data=baseball;
+var team nHome nRuns nhits;
+sum nhitS;
+by Team;
+run;
+
+
+proc contents data=sashelp.baseball;
+run;
+
+proc contents data=sashelp.baseball varnum;
+run;
+
+proc freq data=baseball;
+tables team;
+run;
+
+
+proc freq data=baseball  ;
+tables team ;
+run;
+
+proc means data=baseball;
+var salary;
+run;
+
+
+data cars;
+set sashelp.cars;
+run;
+
+proc contents data=cars;
+run;
+
+proc freq data=cars;
+tables cylinders drivetrain ;
+run;
+
+
+
+
+proc freq data=cars;
+tables cylinders drivetrain /nocol nocum nopercent;
+run;
+
+
+proc freq data=cars;
+tables cylinders*drivetrain /nocol nocum nopercent norow;
+run;
+
+
+
+proc means data=cars;
+run;
+
+
+proc means data=cars min p25 median mean p75 max;
+run;
+
+proc means data=cars min p25 median mean p75 max ;
+var mpg_city;
+run;
+
+proc contents data=cars;
+run;
+
+
+proc means data=cars min mean max ;
+format mpg_city 2. ;
+var mpg_city;
+class cylinders;
+run;
+
+
+proc means data=cars n mean  ;
+format mpg_city 2. ;
+var mpg_city;
+class cylinders drivetrain ;
+run;
+
+
+
+proc means data=cars n mean  ;
+format mpg_city 2. ;
+var mpg_city;
+class cylinders drivetrain ;
+output out = newone.secondbase;
+run;
+
+proc print data=newone.secondbase;
+run;
+
+
+proc univariate data=baseball;
+var nhits;
+run;
+
+
+proc univariate data=cars;
+var mpg_city;
+run;
+
+
+proc univariate data=baseball normal;
+var nhits;
+run;
+
+
+proc univariate data=cars normal;
+var mpg_city;
+run;
+
+
+proc univariate data=baseball plot;
+var nhits;
+run;
+
+
+proc univariate data=cars plot;
+var mpg_city;
+run;
+
+/* class 2 */
+
+data newcars (keep=mpg_city cylinders drivetrain);
+set cars;
+run;
+
+proc print data=newcars (obs=5);
+run;
+
+ 
+data newcars2 (drop=mpg_city);
+set newcars;
+run;
+
+
+proc print data=newcars2 (obs=5);
+run;
