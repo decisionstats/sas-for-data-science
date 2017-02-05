@@ -1,0 +1,30 @@
+/* Generated Code (IMPORT) */
+/* Source File: Protein.csv */
+/* Source Path: /folders/myfolders/mycode */
+/* Code generated on: 2/5/17, 1:53 PM */
+
+%web_drop_table(WORK.IMPORT);
+
+
+FILENAME REFFILE '/folders/myfolders/mycode/Protein.csv';
+
+PROC IMPORT DATAFILE=REFFILE
+	DBMS=CSV
+	OUT=WORK.protein;
+	GETNAMES=YES;
+RUN;
+
+PROC CONTENTS DATA=WORK.protein; RUN;
+
+
+%web_open_table(WORK.IMPORT);
+
+proc print data=protein;
+run;
+
+/* http://www.biz.uiowa.edu/faculty/jledolter/DataMining/protein.csv */
+
+proc cluster data =protein method =centroid;
+var Cereals redmeat whitemeat eggs milk  fish ;
+id country;
+run;
