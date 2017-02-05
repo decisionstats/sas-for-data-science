@@ -1,0 +1,112 @@
+/* Generated Code (IMPORT) */
+/* Source File: GermanCredit.csv */
+/* Source Path: /folders/myfolders/mycode */
+/* Code generated on: 2/5/17, 2:22 PM */
+/* This file germancredit is taken from caret package in R  see http://rpubs.com/newajay/logisticregression*/
+%web_drop_table(WORK.IMPORT);
+
+
+FILENAME REFFILE '/folders/myfolders/mycode/GermanCredit.csv';
+
+PROC IMPORT DATAFILE=REFFILE
+	DBMS=CSV
+	OUT=WORK.IMPORT;
+	GETNAMES=YES;
+RUN;
+
+PROC CONTENTS DATA=WORK.IMPORT; RUN;
+
+
+%web_open_table(WORK.IMPORT);
+
+
+libname ajay25 '/folders/myfolders/mycode/';
+run;
+
+
+data ajay25.germancredit;
+set import;
+run;
+
+
+proc contents data=ajay25.germancredit;
+run;
+proc contents data=ajay25.germancredit varnum;
+run; 
+/* #glm 
+ctrl + / helps in commenting */
+/* #note one variable OtherDebtorsGuarantors_Guaranto	 was truncated due to sas */
+/* conventions on naming size of variable name */
+proc logistic data=ajay25.germancredit;
+model Class = Duration  InstallmentRatePercentage  
+    NumberExistingCredits   CheckingAccountStatus_none   CreditHistory_Critical   
+    Purpose_UsedCar   Purpose_Radio_Television   SavingsAccountBonds_gt_1000   
+    SavingsAccountBonds_Unknown   EmploymentDuration_4_to_7   
+    Personal_Female_NotSingle   OtherDebtorsGuarantors_Guaranto	;
+    run;
+/*   pasting output    */
+/*     The LOGISTIC Procedure */
+/* Model Information */
+/* Data Set	AJAY25.GERMANCREDIT */
+/* Response Variable	Class */
+/* Number of Response Levels	2 */
+/* Model	binary logit */
+/* Optimization Technique	Fisher's scoring */
+/* Number of Observations Read	1000 */
+/* Number of Observations Used	1000 */
+/* Response Profile */
+/* Ordered */
+/* Value	Class	Total */
+/* Frequency */
+/* 1	Bad	300 */
+/* 2	Good	700 */
+/* Probability modeled is Class='Bad'. */
+/* Model Convergence Status */
+/* Convergence criterion (GCONV=1E-8) satisfied. */
+/* Model Fit Statistics */
+/* Criterion	Intercept Only	Intercept and Covariates */
+/* AIC	1223.729	1001.048 */
+/* SC	1228.636	1064.849 */
+/* -2 Log L	1221.729	975.048 */
+/* Testing Global Null Hypothesis: BETA=0 */
+/* Test	Chi-Square	DF	Pr > ChiSq */
+/* Likelihood Ratio	246.6808	12	<.0001 */
+/* Score	213.8552	12	<.0001 */
+/* Wald	167.9783	12	<.0001 */
+/* Analysis of Maximum Likelihood Estimates */
+/* Parameter	DF	Estimate	Standard */
+/* Error	Wald */
+/* Chi-Square	Pr > ChiSq */
+/* Intercept	1	-1.7747	0.3588	24.4619	<.0001 */
+/* Duration	1	0.0440	0.00677	42.2653	<.0001 */
+/* InstallmentRatePerce	1	0.2340	0.0732	10.2270	0.0014 */
+/* NumberExistingCredit	1	0.2952	0.1590	3.4495	0.0633 */
+/* CheckingAccountStatu	1	-1.5738	0.1900	68.6222	<.0001 */
+/* CreditHistory_Critic	1	-0.9530	0.2213	18.5507	<.0001 */
+/* Purpose_UsedCar	1	-0.9913	0.3133	10.0129	0.0016 */
+/* Purpose_Radio_Televi	1	-0.6606	0.1903	12.0456	0.0005 */
+/* SavingsAccountBonds_	1	-1.2221	0.4767	6.5719	0.0104 */
+/* SavingsAccountBonds_	1	-0.8872	0.2364	14.0839	0.0002 */
+/* EmploymentDuration_4	1	-0.6024	0.2261	7.1023	0.0077 */
+/* Personal_Female_NotS	1	0.4522	0.1701	7.0654	0.0079 */
+/* OtherDebtorsGuaranto	1	-0.9404	0.3896	5.8274	0.0158 */
+/* Odds Ratio Estimates */
+/* Effect	Point Estimate	95% Wald */
+/* Confidence Limits */
+/* Duration	1.045	1.031	1.059 */
+/* InstallmentRatePerce	1.264	1.095	1.458 */
+/* NumberExistingCredit	1.343	0.984	1.835 */
+/* CheckingAccountStatu	0.207	0.143	0.301 */
+/* CreditHistory_Critic	0.386	0.250	0.595 */
+/* Purpose_UsedCar	0.371	0.201	0.686 */
+/* Purpose_Radio_Televi	0.517	0.356	0.750 */
+/* SavingsAccountBonds_	0.295	0.116	0.750 */
+/* SavingsAccountBonds_	0.412	0.259	0.655 */
+/* EmploymentDuration_4	0.547	0.352	0.853 */
+/* Personal_Female_NotS	1.572	1.126	2.194 */
+/* OtherDebtorsGuaranto	0.390	0.182	0.838 */
+/* Association of Predicted Probabilities and Observed Responses */
+/* Percent Concordant	79.4	Somers' D	0.589 */
+/* Percent Discordant	20.5	Gamma	0.589 */
+/* Percent Tied	0.1	Tau-a	0.248 */
+/* Pairs	210000	c	0.794 */
