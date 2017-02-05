@@ -1,0 +1,15 @@
+proc logistic data=ajay25.germancredit plots(only)=(roc(id=obs) effect);
+model Class = Duration  InstallmentRatePercentage  
+    NumberExistingCredits   CheckingAccountStatus_none   CreditHistory_Critical   
+    Purpose_UsedCar   Purpose_Radio_Television   SavingsAccountBonds_gt_1000   
+    SavingsAccountBonds_Unknown   EmploymentDuration_4_to_7   
+    Personal_Female_NotSingle   OtherDebtorsGuarantors_Guaranto
+    
+    / scale=none
+                            clparm=wald
+                            clodds=pl
+                            rsquare
+    
+    
+    	;
+    run;
