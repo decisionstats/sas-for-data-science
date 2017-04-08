@@ -1,0 +1,78 @@
+/* Generated Code (IMPORT) */
+/* Source File: Diamond (7).csv */
+/* Source Path: /home/ajay4/my_content/class4 */
+/* Code generated on: 4/8/17, 1:34 PM */
+
+%web_drop_table(WORK.IMPORT);
+
+
+FILENAME REFFILE '/home/ajay4/my_content/class4/Diamond (7).csv';
+
+PROC IMPORT DATAFILE=REFFILE
+	DBMS=CSV
+	OUT=WORK.IMPORT;
+	GETNAMES=YES;
+RUN;
+
+PROC CONTENTS DATA=WORK.IMPORT; RUN;
+
+
+%web_open_table(WORK.IMPORT);
+
+
+
+
+
+
+libname ajay4 '/home/ajay4/my_content/class4';
+run;
+
+data ajay4.diamonds;
+set import;
+run;
+
+proc print data=ajay4.diamonds (obs=5);
+run;
+/*  */
+/* Answer the following questions and submit SAS code also */
+/* Which colour has minimum price/carat  color I */
+/* Which clarity has maximum price/carat clarity VVS1*/
+/* Which certification has least missing values */
+/* Which color  has maximum median price  */
+/* What conclusion can you draw from the variables colour, clarity price  and carat */
+
+data ajay4.diamonds;
+set ajay4.diamonds;
+ppc=price/carat;
+run;
+
+proc means   data=ajay4.diamonds min max median;
+var ppc;
+class colour;
+run;
+
+
+proc means   data=ajay4.diamonds min max median;
+var ppc;
+class clarity;
+run;
+/* #numeric variable */
+
+proc means data=ajay4.diamonds n nmiss;
+/* var carat;  */
+run;
+
+
+proc freq data =ajay4.diamonds;
+
+tables colour  /missing;
+run;
+
+
+proc freq data=ajay4.diamonds;
+tables colour*clarity/norow nocol nocum nopercent;
+run;
+
+proc means data=ajay4.diamonds mean;
+var ppc;
+class colour clarity;run;
